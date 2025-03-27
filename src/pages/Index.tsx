@@ -5,6 +5,7 @@ import Hero from '@/components/home/Hero';
 import ServiceSelection from '@/components/home/ServiceSelection';
 import LocationPicker from '@/components/home/LocationPicker';
 import BookingSummary from '@/components/home/BookingSummary';
+import ExecutiveSummary from '@/components/about/ExecutiveSummary';
 import { CreditCard, Droplets, Shield } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import { Link } from 'react-router-dom';
@@ -17,6 +18,7 @@ const Index = () => {
       <main className="flex-grow">
         <Hero />
         <ServiceSelection />
+        <ExecutiveSummary />
         <LocationPicker />
         <BookingSummary />
         
