@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import BlurContainer from '@/components/ui/BlurContainer';
@@ -38,7 +37,7 @@ const ServicePage = () => {
         'Tire dressing',
         'Interior vacuum'
       ],
-      details: 'Our Basic Wash focuses on getting your car's exterior looking clean and fresh. We hand wash the exterior, clean wheels and tires, apply tire dressing, clean exterior windows, and vacuum the interior to remove debris. Perfect for regular maintenance cleaning.',
+      details: "Our Basic Wash focuses on getting your car's exterior looking clean and fresh. We hand wash the exterior, clean wheels and tires, apply tire dressing, clean exterior windows, and vacuum the interior to remove debris. Perfect for regular maintenance cleaning.",
       image: 'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80'
     },
     {
@@ -53,7 +52,7 @@ const ServicePage = () => {
         'Door jamb cleaning',
         'Air freshener'
       ],
-      details: 'The Premium Wash includes all Basic Wash services plus a thorough interior cleaning. We wipe down all interior surfaces, polish your dashboard and console, clean door jambs, and finish with a premium air freshener of your choice. Ideal for a more thorough refresh.',
+      details: "The Premium Wash includes all Basic Wash services plus a thorough interior cleaning. We wipe down all interior surfaces, polish your dashboard and console, clean door jambs, and finish with a premium air freshener of your choice. Ideal for a more thorough refresh.",
       image: 'https://images.unsplash.com/photo-1605618825105-2aee42639ea9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80'
     },
     {
@@ -69,7 +68,7 @@ const ServicePage = () => {
         'Headlight restoration',
         'Engine bay cleaning'
       ],
-      details: 'Our Deluxe Detail is a complete car care package. In addition to all Premium services, we deep clean carpets and upholstery, condition leather surfaces, apply protective wax coating, restore headlight clarity, and even clean your engine bay. Perfect for seasonal maintenance or preparing your vehicle for sale.',
+      details: "Our Deluxe Detail is a complete car care package. In addition to all Premium services, we deep clean carpets and upholstery, condition leather surfaces, apply protective wax coating, restore headlight clarity, and even clean your engine bay. Perfect for seasonal maintenance or preparing your vehicle for sale.",
       image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80'
     }
   ];
@@ -80,8 +79,8 @@ const ServicePage = () => {
       answer: 'The Basic Wash typically takes 30-45 minutes, the Premium Wash 60-75 minutes, and the Deluxe Detail 2-3 hours, depending on the size and condition of your vehicle.'
     },
     {
-      question: 'What if I\'m not satisfied with the service?',
-      answer: 'Your satisfaction is guaranteed. If you\'re not completely happy with the results, contact us within 24 hours and we\'ll return to address any issues at no additional cost.'
+      question: "What if I'm not satisfied with the service?",
+      answer: "Your satisfaction is guaranteed. If you're not completely happy with the results, contact us within 24 hours and we'll return to address any issues at no additional cost."
     },
     {
       question: 'Do I need to provide water or electricity?',
