@@ -43,7 +43,7 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-wash-600 font-bold text-2xl">Washeroo</span>
+            <span className="text-wash-600 font-bold text-2xl">FlexiWash</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -97,7 +97,7 @@ const Navbar = () => {
         >
           <div className="flex flex-col h-full">
             <div className="mb-8 pt-8">
-              <span className="text-wash-600 font-bold text-2xl">Washeroo</span>
+              <span className="text-wash-600 font-bold text-2xl">FlexiWash</span>
             </div>
             <nav className="flex flex-col space-y-2">
               {navLinks.map((link) => (

@@ -46,7 +46,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">Washeroo</h3>
+              <h3 className="text-lg font-bold mb-4">FlexiWash</h3>
               <p className="text-gray-600 text-sm mb-4">
                 Professional mobile car washing services that come to your location.
               </p>
@@ -104,7 +104,7 @@ const Index = () => {
           </div>
           
           <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 text-sm">© 2023 Washeroo. All rights reserved.</p>
+            <p className="text-gray-500 text-sm">© 2023 FlexiWash. All rights reserved.</p>
             <div className="mt-4 md:mt-0 flex items-center">
               <div className="flex items-center mr-4">
                 <Shield size={16} className="text-gray-400 mr-1" />
