@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   loading?: boolean;
@@ -27,6 +27,7 @@ const AnimatedButton = ({
     secondary: 'bg-secondary text-foreground hover:bg-secondary/80',
     ghost: 'bg-transparent hover:bg-wash-100 text-foreground',
     outline: 'bg-transparent border border-wash-300 hover:border-wash-400 text-foreground',
+    destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
   };
   
   const sizes = {
