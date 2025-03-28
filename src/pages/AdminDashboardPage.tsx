@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import { BarChart, Calendar, MapPin, Clock, Car, CheckCircle, ChevronRight, Users, CircleDollarSign, ListCheck, Settings, Star } from 'lucide-react';
@@ -244,7 +243,7 @@ const AdminDashboardPage = () => {
                         </div>
                         <div className="flex flex-col text-sm text-gray-600 mt-1">
                           <div className="flex items-center">
-                            <User size={14} className="mr-1" />
+                            <Users size={14} className="mr-1" />
                             <span>{job.customer}</span>
                           </div>
                           <div className="flex items-center mt-1">
