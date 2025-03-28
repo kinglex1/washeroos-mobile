@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, Calendar, Car, Map } from 'lucide-react';
+import { Menu, X, User, Calendar, Car, Map, Users, BarChart, ListCheck, Settings } from 'lucide-react';
 import BlurContainer from '../ui/BlurContainer';
 import { cn } from '@/lib/utils';
 
@@ -26,9 +26,9 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/', icon: <Car size={18} /> },
-    { name: 'Services', path: '/services', icon: <Calendar size={18} /> },
-    { name: 'Location', path: '/location', icon: <Map size={18} /> },
     { name: 'Book Now', path: '/booking', icon: <Calendar size={18} /> },
+    { name: 'My Washes', path: '/my-washes', icon: <ListCheck size={18} /> },
+    { name: 'Locations', path: '/location', icon: <Map size={18} /> },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -62,11 +62,19 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/profile" className="ml-2">
-              <div className="w-9 h-9 rounded-full bg-wash-100 flex items-center justify-center text-wash-600 hover:bg-wash-200 transition-colors">
-                <User size={18} />
-              </div>
-            </Link>
+            <div className="flex items-center space-x-1 ml-2">
+              <Link to="/washer-portal" className="px-3 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-wash-50 transition-all duration-300 flex items-center">
+                <Users size={18} className="mr-1" /> Washer Portal
+              </Link>
+              <Link to="/admin-dashboard" className="px-3 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-wash-50 transition-all duration-300 flex items-center">
+                <BarChart size={18} className="mr-1" /> Admin
+              </Link>
+              <Link to="/profile" className="ml-1">
+                <div className="w-9 h-9 rounded-full bg-wash-100 flex items-center justify-center text-wash-600 hover:bg-wash-200 transition-colors">
+                  <User size={18} />
+                </div>
+              </Link>
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -115,6 +123,22 @@ const Navbar = () => {
                   <span>{link.name}</span>
                 </Link>
               ))}
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <Link
+                  to="/washer-portal"
+                  className="px-4 py-3 rounded-xl flex items-center space-x-3 text-gray-600 hover:bg-gray-100/50 transition-all duration-200"
+                >
+                  <Users size={18} />
+                  <span>Washer Portal</span>
+                </Link>
+                <Link
+                  to="/admin-dashboard"
+                  className="px-4 py-3 rounded-xl flex items-center space-x-3 text-gray-600 hover:bg-gray-100/50 transition-all duration-200"
+                >
+                  <BarChart size={18} />
+                  <span>Admin Dashboard</span>
+                </Link>
+              </div>
             </nav>
             <div className="mt-auto pt-6 border-t border-gray-200 flex flex-col space-y-4">
               <Link
@@ -123,6 +147,13 @@ const Navbar = () => {
               >
                 <User size={18} />
                 <span>Profile</span>
+              </Link>
+              <Link
+                to="/settings"
+                className="px-4 py-3 rounded-xl flex items-center space-x-3 text-gray-600 hover:bg-gray-100/50 transition-all duration-200"
+              >
+                <Settings size={18} />
+                <span>Settings</span>
               </Link>
             </div>
           </div>
