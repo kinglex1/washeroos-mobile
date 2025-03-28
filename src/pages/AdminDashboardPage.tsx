@@ -1,9 +1,28 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
-import { BarChart, Calendar, MapPin, Clock, Car, CheckCircle, ChevronRight, Users, CircleDollarSign, ListCheck, Settings, Star } from 'lucide-react';
+import { BarChart, Calendar, MapPin, Clock, Car, CheckCircle, ChevronRight, Users, CircleDollarSign, ListCheck, Settings, Star, ChevronDown, Filter } from 'lucide-react';
 import BlurContainer from '@/components/ui/BlurContainer';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import { Link } from 'react-router-dom';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const AdminDashboardPage = () => {
   // Mock data for business metrics
@@ -13,6 +32,12 @@ const AdminDashboardPage = () => {
     completedToday: 12,
     revenue: '$642.50'
   };
+
+  // State management
+  const [timeFilter, setTimeFilter] = useState('today');
+  const [locationFilter, setLocationFilter] = useState('all');
+  const [showWasherDetails, setShowWasherDetails] = useState<string | null>(null);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   // Mock data for active washers
   const activeWashers = [
@@ -70,6 +95,35 @@ const AdminDashboardPage = () => {
     }
   ];
 
+  // Handle washer assignment
+  const handleAssignWasher = (jobId: string) => {
+    // In a real app, this would open a modal to select a washer
+    alert(`Assigning washer to job: ${jobId}`);
+  };
+
+  // Handle quick actions
+  const handleQuickAction = (action: string) => {
+    alert(`Navigating to ${action} section`);
+    // In a real app, this would navigate to the relevant section
+  };
+
+  // Handle time filter change
+  const handleTimeFilterChange = (value: string) => {
+    setTimeFilter(value);
+    // In a real app, this would filter the data based on the selected time
+  };
+
+  // Handle location filter change
+  const handleLocationFilterChange = (value: string) => {
+    setLocationFilter(value);
+    // In a real app, this would filter the data based on the selected location
+  };
+
+  // Toggle washer details
+  const toggleWasherDetails = (washerId: string) => {
+    setShowWasherDetails(showWasherDetails === washerId ? null : washerId);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
@@ -79,19 +133,41 @@ const AdminDashboardPage = () => {
           <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <div className="flex flex-wrap gap-2">
-              <AnimatedButton variant="outline" size="sm">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div>
+                    <AnimatedButton variant="outline" size="sm">
+                      <Filter size={16} className="mr-1" />
+                      Filters
+                      <ChevronDown size={16} className="ml-1" />
+                    </AnimatedButton>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => handleTimeFilterChange('today')}>
+                    Today
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleTimeFilterChange('week')}>
+                    This Week
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleTimeFilterChange('month')}>
+                    This Month
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <AnimatedButton variant="outline" size="sm" onClick={() => handleQuickAction('team')}>
                 <Users size={16} className="mr-1" />
                 Manage Team
               </AnimatedButton>
-              <AnimatedButton variant="outline" size="sm">
+              <AnimatedButton variant="outline" size="sm" onClick={() => handleQuickAction('jobs')}>
                 <ListCheck size={16} className="mr-1" />
                 Job Queue
               </AnimatedButton>
-              <AnimatedButton variant="outline" size="sm">
+              <AnimatedButton variant="outline" size="sm" onClick={() => handleQuickAction('settings')}>
                 <Settings size={16} className="mr-1" />
                 Settings
               </AnimatedButton>
-              <AnimatedButton>
+              <AnimatedButton onClick={() => handleQuickAction('schedule')}>
                 <Calendar size={16} className="mr-1" />
                 Schedule
               </AnimatedButton>
@@ -150,20 +226,41 @@ const AdminDashboardPage = () => {
           </div>
           
           {/* Active Washers Map */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Team Location Map</h2>
-              <AnimatedButton variant="outline" size="sm">
-                Full View
-              </AnimatedButton>
-            </div>
-            <BlurContainer className="p-4 h-[300px] flex items-center justify-center bg-gray-100">
-              <div className="text-center">
-                <MapPin className="h-10 w-10 text-wash-500 mx-auto mb-3" />
-                <p className="text-gray-500">Interactive map with live washer locations would be displayed here</p>
+          <Collapsible open={isMapExpanded} onOpenChange={setIsMapExpanded}>
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Team Location Map</h2>
+                <CollapsibleTrigger asChild>
+                  <AnimatedButton variant="outline" size="sm">
+                    {isMapExpanded ? 'Collapse' : 'Full View'}
+                  </AnimatedButton>
+                </CollapsibleTrigger>
               </div>
-            </BlurContainer>
-          </div>
+              <BlurContainer className={`p-4 bg-gray-100 transition-all duration-300 ${isMapExpanded ? 'h-[500px]' : 'h-[300px]'} flex items-center justify-center`}>
+                <div className="text-center">
+                  <MapPin className="h-10 w-10 text-wash-500 mx-auto mb-3" />
+                  <p className="text-gray-500">Interactive map with live washer locations would be displayed here</p>
+                  {isMapExpanded && (
+                    <div className="mt-4">
+                      <Select value={locationFilter} onValueChange={handleLocationFilterChange}>
+                        <SelectTrigger className="w-[180px] mx-auto">
+                          <SelectValue placeholder="Select location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Areas</SelectItem>
+                          <SelectItem value="downtown">Downtown</SelectItem>
+                          <SelectItem value="westside">Westside</SelectItem>
+                          <SelectItem value="northside">Northside</SelectItem>
+                          <SelectItem value="eastside">Eastside</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="mt-4 text-gray-500">Currently showing {locationFilter === 'all' ? 'all locations' : locationFilter}</p>
+                    </div>
+                  )}
+                </div>
+              </BlurContainer>
+            </div>
+          </Collapsible>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Active Washers */}
@@ -205,11 +302,29 @@ const AdminDashboardPage = () => {
                               <span>{washer.currentJob}</span>
                             </div>
                           )}
-                          <div className="flex items-center mt-1">
+                          <div className="flex items-center mt-1 cursor-pointer" onClick={() => toggleWasherDetails(washer.id)}>
                             <CheckCircle size={14} className="mr-1" />
                             <span>{washer.completedToday} jobs completed today</span>
+                            <ChevronDown size={14} className={`ml-1 transition-transform ${showWasherDetails === washer.id ? 'rotate-180' : ''}`} />
                           </div>
                         </div>
+                        
+                        {showWasherDetails === washer.id && (
+                          <div className="mt-3 pt-3 border-t border-gray-100">
+                            <h4 className="text-sm font-medium mb-2">Quick Actions</h4>
+                            <div className="flex gap-2">
+                              <AnimatedButton size="sm" variant="outline" onClick={() => alert(`Messaging ${washer.name}`)}>
+                                Message
+                              </AnimatedButton>
+                              <AnimatedButton size="sm" variant="outline" onClick={() => alert(`Reassigning ${washer.name}`)}>
+                                {washer.status === 'On job' ? 'Reassign' : 'Assign Job'}
+                              </AnimatedButton>
+                              <AnimatedButton size="sm" onClick={() => alert(`Viewing details for ${washer.name}`)}>
+                                Details
+                              </AnimatedButton>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </BlurContainer>
@@ -221,11 +336,23 @@ const AdminDashboardPage = () => {
             <div>
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Upcoming Jobs</h2>
-                <Link to="/job-queue">
-                  <AnimatedButton variant="outline" size="sm">
-                    View All
-                  </AnimatedButton>
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Select value={timeFilter} onValueChange={handleTimeFilterChange}>
+                    <SelectTrigger className="w-[130px]">
+                      <SelectValue placeholder="Select time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="today">Today</SelectItem>
+                      <SelectItem value="tomorrow">Tomorrow</SelectItem>
+                      <SelectItem value="week">This Week</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Link to="/job-queue">
+                    <AnimatedButton variant="outline" size="sm">
+                      View All
+                    </AnimatedButton>
+                  </Link>
+                </div>
               </div>
               <div className="grid gap-4">
                 {upcomingJobs.map(job => (
@@ -259,9 +386,31 @@ const AdminDashboardPage = () => {
                         </div>
                         {job.assignedTo === 'Pending' && (
                           <div className="mt-3">
-                            <AnimatedButton size="sm">
-                              Assign Washer
-                            </AnimatedButton>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <div>
+                                  <AnimatedButton size="sm">
+                                    Assign Washer
+                                    <ChevronDown size={16} className="ml-1" />
+                                  </AnimatedButton>
+                                </div>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                {activeWashers.map(washer => (
+                                  <DropdownMenuItem 
+                                    key={washer.id}
+                                    onSelect={() => alert(`Assigning ${washer.name} to job ${job.id}`)}
+                                    disabled={washer.status === 'On job'}
+                                  >
+                                    {washer.name}
+                                    {washer.status === 'On job' && <span className="ml-2 text-xs text-gray-400">(Busy)</span>}
+                                  </DropdownMenuItem>
+                                ))}
+                                <DropdownMenuItem onSelect={() => alert(`Opening manual assignment for job ${job.id}`)}>
+                                  Custom Assignment...
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         )}
                       </div>
@@ -276,7 +425,10 @@ const AdminDashboardPage = () => {
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              <BlurContainer className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <BlurContainer 
+                className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleQuickAction('analytics')}
+              >
                 <div className="w-12 h-12 rounded-full bg-wash-100 flex items-center justify-center mb-3">
                   <BarChart className="h-6 w-6 text-wash-600" />
                 </div>
@@ -284,7 +436,10 @@ const AdminDashboardPage = () => {
                 <p className="text-sm text-gray-500 mt-1">View business performance</p>
               </BlurContainer>
               
-              <BlurContainer className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <BlurContainer 
+                className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleQuickAction('reviews')}
+              >
                 <div className="w-12 h-12 rounded-full bg-wash-100 flex items-center justify-center mb-3">
                   <Star className="h-6 w-6 text-wash-600" />
                 </div>
@@ -292,7 +447,10 @@ const AdminDashboardPage = () => {
                 <p className="text-sm text-gray-500 mt-1">Manage customer feedback</p>
               </BlurContainer>
               
-              <BlurContainer className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <BlurContainer 
+                className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleQuickAction('financials')}
+              >
                 <div className="w-12 h-12 rounded-full bg-wash-100 flex items-center justify-center mb-3">
                   <CircleDollarSign className="h-6 w-6 text-wash-600" />
                 </div>
@@ -300,7 +458,10 @@ const AdminDashboardPage = () => {
                 <p className="text-sm text-gray-500 mt-1">View revenue reports</p>
               </BlurContainer>
               
-              <BlurContainer className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <BlurContainer 
+                className="p-5 flex flex-col items-center text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleQuickAction('settings')}
+              >
                 <div className="w-12 h-12 rounded-full bg-wash-100 flex items-center justify-center mb-3">
                   <Settings className="h-6 w-6 text-wash-600" />
                 </div>
