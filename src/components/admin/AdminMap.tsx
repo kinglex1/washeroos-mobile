@@ -39,7 +39,7 @@ const AdminMap: React.FC<AdminMapProps> = ({ markers, onMarkerClick }) => {
               top: `${(90 - marker.lat) * (100 / 180)}%`,
               transform: 'translate(-50%, -50%)'
             }}
-            className="cursor-pointer"
+            className="cursor-pointer transition-transform hover:scale-110"
             onClick={() => onMarkerClick && onMarkerClick(marker.id, marker.type)}
           >
             <div className={`
@@ -58,7 +58,7 @@ const AdminMap: React.FC<AdminMapProps> = ({ markers, onMarkerClick }) => {
                       ? 'bg-green-500'
                       : 'bg-red-500'
               }
-              shadow-md
+              shadow-md hover:shadow-lg
             `}>
               {marker.type === 'washer' 
                 ? <User className="h-4 w-4 text-white" /> 

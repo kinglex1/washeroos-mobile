@@ -35,6 +35,7 @@ export const useAdminData = () => {
       assignWasher(bookingId, washerId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['washers'] });
     }
   });
 
@@ -56,7 +57,10 @@ export const useAdminData = () => {
 
   const sendNotificationMutation = useMutation({
     mutationFn: ({ userId, message }: { userId: string, message: string }) => 
-      sendNotification(userId, message)
+      sendNotification(userId, message),
+    onSuccess: () => {
+      // No need to invalidate queries for notifications
+    }
   });
 
   return {

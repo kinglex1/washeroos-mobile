@@ -33,7 +33,7 @@ export interface MetricData {
 }
 
 // Mock data for admin dashboard
-const mockWashers: Washer[] = [
+let mockWashers: Washer[] = [
   {
     id: 'w1',
     name: 'Michael Johnson',
@@ -86,7 +86,7 @@ const mockWashers: Washer[] = [
   }
 ];
 
-const mockBookings: Booking[] = [
+let mockBookings: Booking[] = [
   {
     id: 'b1',
     customerName: 'Alex Thompson',
@@ -163,7 +163,7 @@ const mockMetrics: MetricData = {
 export const getWashers = (): Promise<Washer[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(mockWashers);
+      resolve([...mockWashers]);
     }, 500);
   });
 };
@@ -171,7 +171,7 @@ export const getWashers = (): Promise<Washer[]> => {
 export const getBookings = (): Promise<Booking[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(mockBookings);
+      resolve([...mockBookings]);
     }, 500);
   });
 };
@@ -179,70 +179,102 @@ export const getBookings = (): Promise<Booking[]> => {
 export const getMetrics = (): Promise<MetricData> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(mockMetrics);
+      // Update active washers count based on actual data
+      const updatedMetrics = {
+        ...mockMetrics,
+        activeWashers: mockWashers.filter(w => w.status === 'active').length
+      };
+      resolve(updatedMetrics);
     }, 500);
   });
 };
 
 export const assignWasher = (bookingId: string, washerId: string): Promise<Booking> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const booking = mockBookings.find(b => b.id === bookingId);
+      const bookingIndex = mockBookings.findIndex(b => b.id === bookingId);
       const washer = mockWashers.find(w => w.id === washerId);
       
-      if (booking && washer) {
-        const updatedBooking = {
-          ...booking,
+      if (bookingIndex !== -1 && washer) {
+        // Update the booking with the washer's name
+        mockBookings[bookingIndex] = {
+          ...mockBookings[bookingIndex],
           assignedWasher: washer.name
         };
         
+        // Update the washer's status to busy
+        const washerIndex = mockWashers.findIndex(w => w.id === washerId);
+        if (washerIndex !== -1) {
+          mockWashers[washerIndex] = {
+            ...mockWashers[washerIndex],
+            status: 'busy'
+          };
+        }
+        
         toast.success(`Washer ${washer.name} assigned to booking #${bookingId}`);
-        resolve(updatedBooking);
+        resolve(mockBookings[bookingIndex]);
       } else {
         toast.error("Failed to assign washer to booking");
-        throw new Error("Booking or washer not found");
+        reject(new Error("Booking or washer not found"));
       }
     }, 800);
   });
 };
 
 export const updateBookingStatus = (bookingId: string, status: Booking['status']): Promise<Booking> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const booking = mockBookings.find(b => b.id === bookingId);
+      const bookingIndex = mockBookings.findIndex(b => b.id === bookingId);
       
-      if (booking) {
-        const updatedBooking = {
-          ...booking,
+      if (bookingIndex !== -1) {
+        // Update the booking status
+        mockBookings[bookingIndex] = {
+          ...mockBookings[bookingIndex],
           status
         };
         
+        // If completed, potentially update washer stats
+        if (status === 'completed' && mockBookings[bookingIndex].assignedWasher) {
+          const washerName = mockBookings[bookingIndex].assignedWasher;
+          const washerIndex = mockWashers.findIndex(w => w.name === washerName);
+          
+          if (washerIndex !== -1) {
+            mockWashers[washerIndex] = {
+              ...mockWashers[washerIndex],
+              status: 'active',
+              completedWashes: mockWashers[washerIndex].completedWashes + 1,
+              earnings: mockWashers[washerIndex].earnings + mockBookings[bookingIndex].amount
+            };
+          }
+        }
+        
         toast.success(`Booking #${bookingId} status updated to ${status}`);
-        resolve(updatedBooking);
+        resolve(mockBookings[bookingIndex]);
       } else {
         toast.error("Failed to update booking status");
-        throw new Error("Booking not found");
+        reject(new Error("Booking not found"));
       }
     }, 800);
   });
 };
 
 export const updateWasherStatus = (washerId: string, status: Washer['status']): Promise<Washer> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const washer = mockWashers.find(w => w.id === washerId);
+      const washerIndex = mockWashers.findIndex(w => w.id === washerId);
       
-      if (washer) {
-        const updatedWasher = {
-          ...washer,
+      if (washerIndex !== -1) {
+        // Update the washer status
+        mockWashers[washerIndex] = {
+          ...mockWashers[washerIndex],
           status
         };
         
-        toast.success(`Washer ${washer.name} status updated to ${status}`);
-        resolve(updatedWasher);
+        toast.success(`Washer ${mockWashers[washerIndex].name} status updated to ${status}`);
+        resolve(mockWashers[washerIndex]);
       } else {
         toast.error("Failed to update washer status");
-        throw new Error("Washer not found");
+        reject(new Error("Washer not found"));
       }
     }, 800);
   });
@@ -251,7 +283,7 @@ export const updateWasherStatus = (washerId: string, status: Washer['status']): 
 export const sendNotification = (userId: string, message: string): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      toast.success(`Notification sent to user #${userId}`);
+      toast.success(`Notification sent: "${message}"`);
       resolve();
     }, 800);
   });

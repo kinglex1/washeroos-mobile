@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MoreHorizontal, CheckCircle, XCircle, Send, UserPlus, RefreshCw } from "lucide-react";
 import { Booking, Washer } from "@/services/adminService";
+import { toast } from "sonner";
 
 interface ActionItem {
   label: string;
@@ -46,6 +47,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
   }, []);
 
   const id = bookingId || washerId;
+  if (!id) {
+    console.error("AdminActionDropdown: No ID provided");
+    return null;
+  }
 
   const getActions = (): ActionItem[] => {
     if (itemType === 'booking') {
@@ -56,7 +61,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Start Service',
           icon: <RefreshCw size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'in-progress');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'in-progress');
+              toast.info(`Starting service for booking #${id}`);
+            }
             setIsOpen(false);
           },
           color: 'text-blue-600'
@@ -66,7 +74,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Assign Washer',
           icon: <UserPlus size={14} />,
           onClick: () => {
-            onAssignWasher && id && onAssignWasher(id);
+            if (onAssignWasher && id) {
+              onAssignWasher(id);
+              toast.info(`Opening assign washer dialog for booking #${id}`);
+            }
             setIsOpen(false);
           },
           color: 'text-purple-600'
@@ -78,7 +89,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Complete',
           icon: <CheckCircle size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'completed');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'completed');
+              toast.success(`Booking #${id} marked as completed`);
+            }
             setIsOpen(false);
           },
           color: 'text-green-600'
@@ -90,7 +104,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Cancel',
           icon: <XCircle size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'cancelled');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'cancelled');
+              toast.info(`Booking #${id} cancelled`);
+            }
             setIsOpen(false);
           },
           color: 'text-red-600'
@@ -101,7 +118,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
         label: 'Notify Customer',
         icon: <Send size={14} />,
         onClick: () => {
-          onSendNotification && id && onSendNotification(id);
+          if (onSendNotification && id) {
+            onSendNotification(id);
+            toast.info(`Opening notification dialog for booking #${id}`);
+          }
           setIsOpen(false);
         },
         color: 'text-gray-600'
@@ -116,7 +136,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Set Active',
           icon: <CheckCircle size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'active');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'active');
+              toast.success(`Washer #${id} now active`);
+            }
             setIsOpen(false);
           },
           color: 'text-green-600'
@@ -128,7 +151,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Set Busy',
           icon: <RefreshCw size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'busy');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'busy');
+              toast.info(`Washer #${id} now busy`);
+            }
             setIsOpen(false);
           },
           color: 'text-yellow-600'
@@ -140,7 +166,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
           label: 'Set Offline',
           icon: <XCircle size={14} />,
           onClick: () => {
-            onStatusChange && id && onStatusChange(id, 'offline');
+            if (onStatusChange && id) {
+              onStatusChange(id, 'offline');
+              toast.info(`Washer #${id} now offline`);
+            }
             setIsOpen(false);
           },
           color: 'text-gray-600'
@@ -151,7 +180,10 @@ const AdminActionDropdown: React.FC<AdminActionDropdownProps> = ({
         label: 'Send Message',
         icon: <Send size={14} />,
         onClick: () => {
-          onSendNotification && id && onSendNotification(id);
+          if (onSendNotification && id) {
+            onSendNotification(id);
+            toast.info(`Opening message dialog for washer #${id}`);
+          }
           setIsOpen(false);
         },
         color: 'text-blue-600'
